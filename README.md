@@ -10,9 +10,9 @@ Nodepanels工具包，提供能力给探针以执行系统功能
 
 ### 程序信息：
 
-版本：`v1.1.0`
+版本：`v1.1.1`
 
-更新日期：`2021/12/27`
+更新日期：`2021/12/31`
 
 支持系统：`Linux 32/64位` | `Linux ARM 32/64位` | `Windows 32/64位` | `Windows ARM 32/64位`
 
@@ -338,15 +338,15 @@ Nodepanels工具包，提供能力给探针以执行系统功能
         </tr>
         <tr>
             <th>Linux网络测速不依赖sudo</th>
-            <th></th>
-            <th>0%</th>
-            <th></th>
+            <th>✔</th>
+            <th>100%</th>
+            <th>2021-12-31</th>
             <th></th>
         </tr>
          <tr>
             <th>Linux、Windows代码隔离</th>
             <th></th>
-            <th>0%</th>
+            <th>10%</th>
             <th></th>
             <th></th>
         </tr>
