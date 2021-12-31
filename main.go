@@ -31,18 +31,23 @@ func main() {
 		}
 	}()
 
-	version := "v1.1.0"
+	version := "v1.1.1"
 
 	if len(os.Args) > 1 {
+
+		if os.Args[1] == "-version" {
+			fmt.Print(version)
+			return
+		}
 
 		if !util.CheckCompleteness() {
 			fmt.Println("The program file is incomplete, please reinstall.")
 		} else {
 			switch os.Args[1] {
 			case "-performance-net-speedtest-ping":
-				speedtest.SpeedTest("performance-net-speedtest-ping")
+				speedtest.SpeedTest()
 			case "-performance-net-speedtest-all":
-				speedtest.SpeedTest("performance-net-speedtest-all")
+				speedtest.SpeedTest()
 			case "-probe-upgrade":
 				probe.ProbeUpgrade()
 			case "-process-list":
@@ -127,8 +132,6 @@ func main() {
 				file.FileUpload()
 			case "-file-download":
 				file.FileDownload()
-			case "-version":
-				fmt.Print(version)
 			default:
 				fmt.Println("Wrong parameter.")
 			}
