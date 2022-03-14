@@ -53,6 +53,11 @@ type Command struct {
 	Stop    bool `json:"stop"`
 }
 
+type Param struct {
+	Page  string `json:"page"'`
+	Param string `json:"param"`
+}
+
 func GetToolType() string {
 	return strings.Replace(os.Args[1], "-", "", 1)
 }
@@ -80,11 +85,39 @@ func GetConfig() Config {
 }
 
 func GetParam() string {
-	_, tempFileExist := os.Stat(filepath.Join(Exepath(), GetToolType()+"-"+os.Args[2]+".temp"))
+	_, tempFileExist := os.Stat(filepath.Join(Exepath(), "temp", GetToolType()+"-"+os.Args[2]+".temp"))
 	if tempFileExist == nil {
-		paramByte, _ := ioutil.ReadFile(filepath.Join(Exepath(), GetToolType()+"-"+os.Args[2]+".temp"))
-		return string(paramByte)
+		paramByte, _ := ioutil.ReadFile(filepath.Join(Exepath(), "temp", GetToolType()+"-"+os.Args[2]+".temp"))
+		param := Param{}
+		json.Unmarshal(paramByte, &param)
+		return param.Param
 	} else {
+		_, tempFileExist := os.Stat(filepath.Join(Exepath(), GetToolType()+"-"+os.Args[2]+".temp"))
+		if tempFileExist == nil {
+			paramByte, _ := ioutil.ReadFile(filepath.Join(Exepath(), GetToolType()+"-"+os.Args[2]+".temp"))
+			param := Param{}
+			json.Unmarshal(paramByte, &param)
+			return param.Param
+		}
+		return ""
+	}
+}
+
+func GetPageId() string {
+	_, tempFileExist := os.Stat(filepath.Join(Exepath(), "temp", GetToolType()+"-"+os.Args[2]+".temp"))
+	if tempFileExist == nil {
+		paramByte, _ := ioutil.ReadFile(filepath.Join(Exepath(), "temp", GetToolType()+"-"+os.Args[2]+".temp"))
+		param := Param{}
+		json.Unmarshal(paramByte, &param)
+		return param.Page
+	} else {
+		_, tempFileExist := os.Stat(filepath.Join(Exepath(), GetToolType()+"-"+os.Args[2]+".temp"))
+		if tempFileExist == nil {
+			paramByte, _ := ioutil.ReadFile(filepath.Join(Exepath(), GetToolType()+"-"+os.Args[2]+".temp"))
+			param := Param{}
+			json.Unmarshal(paramByte, &param)
+			return param.Page
+		}
 		return ""
 	}
 }
@@ -97,11 +130,11 @@ func PrintResult(msg string) {
 	msg = strings.ReplaceAll(msg, "\\", "\\\\")
 	msg = strings.ReplaceAll(msg, "\n", "\\n")
 	msg = strings.ReplaceAll(msg, "\"", "\\\"")
-	fmt.Println("{\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"" + msg + "\"}")
+	fmt.Println("{\"pid\":\"" + GetPageId() + "\"," + "\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"" + msg + "\"}")
 }
 
 func PrintSuccess() {
-	fmt.Println("{\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"SUCCESS\"}")
+	fmt.Println("{\"pid\":\"" + GetPageId() + "\"," + "\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"SUCCESS\"}")
 }
 
 func PrintError(msg string) {
@@ -113,7 +146,7 @@ func PrintError(msg string) {
 }
 
 func PrintEnd() {
-	fmt.Println("{\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"END\"}")
+	fmt.Println("{\"pid\":\"" + GetPageId() + "\"," + "\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"END\"}")
 }
 
 func CheckCompleteness() bool {

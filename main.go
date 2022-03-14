@@ -31,7 +31,7 @@ func main() {
 		}
 	}()
 
-	version := "v1.1.1"
+	version := "v1.1.2"
 
 	if len(os.Args) > 1 {
 
@@ -136,7 +136,6 @@ func main() {
 				fmt.Println("Wrong parameter.")
 			}
 		}
-		util.PrintEnd()
 		util.DelParam()
 	} else {
 		fmt.Println("Wrong parameter.")

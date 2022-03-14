@@ -43,7 +43,6 @@ func SpeedTest() {
 		if err := cmd.Wait(); err != nil {
 		}
 	}
-	util.PrintSuccess()
 
 	os.Remove(filepath.Join(util.Exepath(), speedtestFileName))
 }
