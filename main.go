@@ -5,6 +5,7 @@ import (
 	"nodepanels-tool/tool/file"
 	"nodepanels-tool/tool/monitor"
 	"nodepanels-tool/tool/performance/speedtest"
+	"nodepanels-tool/tool/performance/trace"
 	"nodepanels-tool/tool/probe"
 	"nodepanels-tool/tool/process"
 	"nodepanels-tool/tool/system/dns"
@@ -31,7 +32,7 @@ func main() {
 		}
 	}()
 
-	version := "v1.1.2"
+	version := "v1.1.3"
 
 	if len(os.Args) > 1 {
 
@@ -132,6 +133,8 @@ func main() {
 				file.FileUpload()
 			case "-file-download":
 				file.FileDownload()
+			case "-trace":
+				trace.Trace()
 			default:
 				fmt.Println("Wrong parameter.")
 			}

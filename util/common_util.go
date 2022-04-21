@@ -33,5 +33,5 @@ func ExecLinuxCmd(cmd string) string {
 
 func ExecWindowsCmd(cmd string) string {
 	output, _ := exec.Command("cmd", "/C", cmd).Output()
-	return string(output)
+	return strings.TrimRight(strings.TrimRight(string(output), "\n"), "\r")
 }

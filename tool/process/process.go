@@ -60,23 +60,25 @@ func GetProcessesList() {
 	processes, _ := process.Processes()
 	for _, val := range processes {
 		name, _ := val.Name()
-		cmd, _ := val.Cmdline()
-		pid := val.Pid
-		cpuPercent, _ := val.CPUPercent()
-		memPercent, _ := val.MemoryPercent()
+		if string(name) != "nodepanels-tool" {
+			cmd, _ := val.Cmdline()
+			pid := val.Pid
+			cpuPercent, _ := val.CPUPercent()
+			memPercent, _ := val.MemoryPercent()
 
-		processUsage := ProcessUsage{}
-		processUsage.Name = name
-		processUsage.Cmd = cmd
-		if strings.Index(strconv.FormatFloat(cpuPercent, 'f', -1, 64), "0.0") == 0 {
-			processUsage.CpuPercent = float64(0)
-		} else {
-			processUsage.CpuPercent = cpuPercent
+			processUsage := ProcessUsage{}
+			processUsage.Name = name
+			processUsage.Cmd = cmd
+			if strings.Index(strconv.FormatFloat(cpuPercent, 'f', -1, 64), "0.0") == 0 {
+				processUsage.CpuPercent = float64(0)
+			} else {
+				processUsage.CpuPercent = cpuPercent
+			}
+			processUsage.MemPercent = memPercent
+			processUsage.Pid = pid
+
+			list = append(list, processUsage)
 		}
-		processUsage.MemPercent = memPercent
-		processUsage.Pid = pid
-
-		list = append(list, processUsage)
 	}
 	sort.Sort(ProcessUsageSlice(list))
 	if len(list) >= 30 {

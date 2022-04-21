@@ -141,8 +141,8 @@ func PrintError(msg string) {
 	msg = strings.ReplaceAll(msg, "\\", "\\\\")
 	msg = strings.ReplaceAll(msg, "\n", "\\n")
 	msg = strings.ReplaceAll(msg, "\"", "\\\"")
-	fmt.Println("{\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"ERROR:" + msg + "\"}")
-	fmt.Println("{\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"ERROR\"}")
+	fmt.Println("{\"pid\":\"" + GetPageId() + "\"," + "\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"ERROR:" + msg + "\"}")
+	fmt.Println("{\"pid\":\"" + GetPageId() + "\"," + "\"toolType\":\"" + GetToolType() + "\",\"serverId\":\"" + GetHostId() + "\",\"msg\":\"ERROR\"}")
 }
 
 func PrintEnd() {
