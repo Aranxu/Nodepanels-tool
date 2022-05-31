@@ -1,6 +1,6 @@
 # <img src="https://github.com/Aranxu/Nodepanels-tool/blob/master/favicon.ico" width = "46" height = "40" alt="" align=center/>Nodepanels-tool
 
-<img src="https://img.shields.io/badge/Go-1.17-ff69b4"/> <img src="https://img.shields.io/badge/version-v1.1.0-orange"/> <img src="https://img.shields.io/badge/TG-@nodepanels-green?logo=telegram&style=plastic"/>
+<img src="https://img.shields.io/badge/Go-1.18-ff69b4"/> <img src="https://img.shields.io/badge/version-v2.0.0-orange"/> <img src="https://img.shields.io/badge/TG-@nodepanels-green?logo=telegram&style=plastic"/>
 
 Nodepanels工具包，提供能力给探针以执行系统功能
 
@@ -10,9 +10,9 @@ Nodepanels工具包，提供能力给探针以执行系统功能
 
 ### 程序信息：
 
-版本：`v1.1.2`
+版本：`v2.0.0`
 
-更新日期：`2022/03/15`
+更新日期：`2022/06/01`
 
 支持系统：`Linux 32/64位` | `Linux ARM 32/64位` | `Windows 32/64位` | `Windows ARM 32/64位`
 
@@ -38,6 +38,13 @@ Nodepanels工具包，提供能力给探针以执行系统功能
         </tr>
          <tr>
             <th>网络测速</th>
+            <th>✔</th>
+            <th>100%</th>
+            <th>linux | windows</th>
+            <th></th>
+        </tr>
+	  <tr>
+            <th>路由跟踪</th>
             <th>✔</th>
             <th>100%</th>
             <th>linux | windows</th>
@@ -345,16 +352,16 @@ Nodepanels工具包，提供能力给探针以执行系统功能
         </tr>
          <tr>
             <th>Linux、Windows代码隔离</th>
-            <th></th>
-            <th>10%</th>
-            <th></th>
+            <th>✔</th>
+            <th>100%</th>
+            <th>2022-06-01</th>
             <th></th>
         </tr>
          <tr>
             <th>优化获取进程列表资源占用高</th>
-            <th></th>
-            <th>0%</th>
-            <th></th>
+            <th>✔</th>
+            <th>100%</th>
+            <th>2022-06-01</th>
             <th></th>
         </tr>
     </table>
