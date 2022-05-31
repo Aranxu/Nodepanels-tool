@@ -1,7 +1,10 @@
 package env
 
-import "nodepanels-tool/util"
+import (
+	"nodepanels-tool/command"
+	"nodepanels-tool/util"
+)
 
 func GetEnv() {
-	util.PrintResult(util.ExecLinuxCmd("env"))
+	command.PrintResult(util.ExecLinuxCmd("env"))
 }

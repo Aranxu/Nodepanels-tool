@@ -3,7 +3,7 @@ package process
 import (
 	"encoding/json"
 	"github.com/shirou/gopsutil/v3/process"
-	"nodepanels-tool/util"
+	"nodepanels-tool/command"
 	"sort"
 	"strconv"
 	"strings"
@@ -60,7 +60,7 @@ func GetProcessesList() {
 	processes, _ := process.Processes()
 	for _, val := range processes {
 		name, _ := val.Name()
-		if string(name) != "nodepanels-tool" {
+		if strings.Index(strings.ToLower(name), "nodepanels-tool") < 0 {
 			cmd, _ := val.Cmdline()
 			pid := val.Pid
 			cpuPercent, _ := val.CPUPercent()
@@ -87,12 +87,12 @@ func GetProcessesList() {
 
 	result, _ := json.Marshal(list)
 
-	util.PrintResult(string(result))
+	command.PrintResult(string(result))
 }
 
 func GetProcessInfo() {
 
-	processId, _ := strconv.Atoi(util.GetParam())
+	processId, _ := strconv.Atoi(command.GetCommandParam())
 
 	process, _ := process.NewProcess(int32(processId))
 
@@ -130,6 +130,6 @@ func GetProcessInfo() {
 
 		msg, _ := json.Marshal(processInfo)
 
-		util.PrintResult(string(msg))
+		command.PrintResult(string(msg))
 	}
 }

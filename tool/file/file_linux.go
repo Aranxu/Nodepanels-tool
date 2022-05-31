@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gookit/goutil/fsutil"
 	"io/ioutil"
-	"nodepanels-tool/util"
+	"nodepanels-tool/command"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -14,11 +14,11 @@ import (
 )
 
 func List() {
-	if fsutil.PathExists(util.GetParam()) {
+	if fsutil.PathExists(command.GetCommandParam()) {
 		var fileInfoList []FileInfo
-		fileList, _ := ioutil.ReadDir(util.GetParam())
+		fileList, _ := ioutil.ReadDir(command.GetCommandParam())
 		for i := range fileList {
-			fileStat, _ := os.Stat(filepath.Join(util.GetParam(), fileList[i].Name()))
+			fileStat, _ := os.Stat(filepath.Join(command.GetCommandParam(), fileList[i].Name()))
 			var username string
 			u, err := user.LookupId(strconv.FormatUint(uint64(fileStat.Sys().(*syscall.Stat_t).Uid), 10))
 			if err == nil {
@@ -41,8 +41,8 @@ func List() {
 			fileInfoList = append(fileInfoList, fileInfo)
 		}
 		fileInfoJson, _ := json.Marshal(fileInfoList)
-		util.PrintResult(string(fileInfoJson))
+		command.PrintResult(string(fileInfoJson))
 	} else {
-		util.PrintResult("NOTEXIST")
+		command.PrintResult("NOTEXIST")
 	}
 }

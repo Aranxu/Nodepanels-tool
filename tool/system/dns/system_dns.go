@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"nodepanels-tool/command"
 	"nodepanels-tool/util"
 	"os"
 	"os/exec"
@@ -18,13 +19,13 @@ func GetDns() {
 	r, _ := regexp.Compile("(nameserver)\\s+(.+)")
 
 	nameserver, _ := json.Marshal(r.FindAllString(string(file), -1))
-	util.PrintResult(string(nameserver))
+	command.PrintResult(string(nameserver))
 }
 
 func SetDns() {
 
 	var nameserverList []string
-	json.Unmarshal([]byte(util.GetParam()), &nameserverList)
+	json.Unmarshal([]byte(command.GetCommandParam()), &nameserverList)
 
 	_, err := os.Stat("/etc/resolv.conf")
 	if err == nil {
@@ -84,7 +85,7 @@ func SetDns() {
 		exec.Command("sh", "-c", "/etc/init.d/networking restart").Output()
 	}
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func BackupDns() {
@@ -134,7 +135,7 @@ func BackupDns() {
 		io.Copy(destination, source)
 	}
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func RestoreDns() {
@@ -175,5 +176,5 @@ func RestoreDns() {
 		os.WriteFile("/etc/resolvconf/resolv.conf.d/base", source, 0777)
 	}
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }

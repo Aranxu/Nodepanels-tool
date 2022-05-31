@@ -2,9 +2,9 @@ package startup
 
 import (
 	"fmt"
-	"nodepanels-tool/util"
+	"nodepanels-tool/config"
 )
 
 func GetStartup() {
-	fmt.Println("{\"toolType\":\"system-startup-get\",\"serverId\":\"" + util.GetHostId() + "\",\"msg\":\"END\"}")
+	fmt.Println("{\"toolType\":\"system-startup-get\",\"serverId\":\"" + config.GetSid() + "\",\"msg\":\"END\"}")
 }

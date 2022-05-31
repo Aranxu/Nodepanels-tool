@@ -11,6 +11,8 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"nodepanels-tool/command"
+	"nodepanels-tool/config"
 	"nodepanels-tool/util"
 	"os"
 	"path/filepath"
@@ -30,21 +32,21 @@ type FileInfo struct {
 }
 
 func FileNewFile() {
-	fileName := strings.Split(util.GetParam(), ",")[0]
-	filePath := strings.Split(util.GetParam(), ",")[1]
+	fileName := strings.Split(command.GetCommandParam(), ",")[0]
+	filePath := strings.Split(command.GetCommandParam(), ",")[1]
 	os.Create(filepath.Join(filePath, fileName))
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileNewFolder() {
-	fileName := strings.Split(util.GetParam(), ",")[0]
-	filePath := strings.Split(util.GetParam(), ",")[1]
+	fileName := strings.Split(command.GetCommandParam(), ",")[0]
+	filePath := strings.Split(command.GetCommandParam(), ",")[1]
 	os.Mkdir(filepath.Join(filePath, fileName), 0666)
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileAttr() {
-	param := util.GetParam()
+	param := command.GetCommandParam()
 	result := ""
 	statStr := util.ExecLinuxCmd("stat \"" + param + "\"")
 	fileStr := util.ExecLinuxCmd("file -b \"" + param + "\"")
@@ -62,34 +64,34 @@ func FileAttr() {
 		result = "{\"stat\":\"" + statStr + "\",\"file\":\"" + fileStr + "\"}"
 	}
 
-	util.PrintResult(result)
+	command.PrintResult(result)
 }
 
 func FileMd5() {
-	data, err := ioutil.ReadFile(util.GetParam())
+	data, err := ioutil.ReadFile(command.GetCommandParam())
 	if err != nil {
-		util.PrintError("")
+		command.PrintError("")
 	}
-	util.PrintResult(fmt.Sprintf("%x", md5.Sum(data)))
+	command.PrintResult(fmt.Sprintf("%x", md5.Sum(data)))
 }
 
 func FileSha1() {
-	data, err := ioutil.ReadFile(util.GetParam())
+	data, err := ioutil.ReadFile(command.GetCommandParam())
 	if err != nil {
-		util.PrintError("")
+		command.PrintError("")
 	}
-	util.PrintResult(fmt.Sprintf("%x", sha1.Sum(data)))
+	command.PrintResult(fmt.Sprintf("%x", sha1.Sum(data)))
 }
 
 func FilePermission() {
 	userList := strings.ReplaceAll(util.ExecLinuxCmd("cat /etc/passwd | awk -F':' '{ print $1}'"), "\n", ",")
 	groupList := strings.ReplaceAll(util.ExecLinuxCmd("cat /etc/group | cut -d : -f 1"), "\n", ",")
-	filePermission := strings.Split(strings.Split(util.ExecLinuxCmd("stat \""+util.GetParam()+"\""), "Access: (")[1], ")")[0]
-	util.PrintResult("{\"user\":\"" + userList + "\",\"group\":\"" + groupList + "\",\"permission\":\"" + filePermission + "\"}")
+	filePermission := strings.Split(strings.Split(util.ExecLinuxCmd("stat \""+command.GetCommandParam()+"\""), "Access: (")[1], ")")[0]
+	command.PrintResult("{\"user\":\"" + userList + "\",\"group\":\"" + groupList + "\",\"permission\":\"" + filePermission + "\"}")
 }
 
 func FilePermissionSet() {
-	param := strings.Split(util.GetParam(), ",")
+	param := strings.Split(command.GetCommandParam(), ",")
 	filePath := param[0]
 	user := param[1]
 	group := param[2]
@@ -103,29 +105,29 @@ func FilePermissionSet() {
 		util.ExecLinuxCmd("chmod " + permission + " \"" + filePath + "\"")
 		util.ExecLinuxCmd("chown " + user + ":" + group + " \"" + filePath + "\"")
 	}
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileDelete() {
-	filePaths := util.GetParam()
+	filePaths := command.GetCommandParam()
 	for _, filePath := range strings.Split(filePaths, ",") {
 		os.RemoveAll(filePath)
 	}
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileCopy() {
-	tasks := strings.Split(util.GetParam(), ";")
+	tasks := strings.Split(command.GetCommandParam(), ";")
 	for _, val := range tasks {
 		resFile := strings.Split(val, ",")[0]
 		desFile := strings.Split(val, ",")[1]
 		copy(resFile, desFile)
 	}
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileMove() {
-	tasks := strings.Split(util.GetParam(), ";")
+	tasks := strings.Split(command.GetCommandParam(), ";")
 	for _, val := range tasks {
 		resFile := strings.Split(val, ",")[0]
 		desFile := strings.Split(val, ",")[1]
@@ -135,22 +137,22 @@ func FileMove() {
 		copy(resFile, desFile)
 		os.RemoveAll(resFile)
 	}
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileRename() {
-	resFile := strings.Split(util.GetParam(), ",")[0]
-	desFile := strings.Split(util.GetParam(), ",")[1]
+	resFile := strings.Split(command.GetCommandParam(), ",")[0]
+	desFile := strings.Split(command.GetCommandParam(), ",")[1]
 	os.Rename(resFile, desFile)
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileEdit() {
 	fileEditDto := FileEditDto{}
-	json.Unmarshal([]byte(util.GetParam()), &fileEditDto)
+	json.Unmarshal([]byte(command.GetCommandParam()), &fileEditDto)
 
 	os.WriteFile(fileEditDto.FilePath, []byte(fileEditDto.Content), 0644)
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 type FileEditDto struct {
@@ -159,12 +161,12 @@ type FileEditDto struct {
 }
 
 func FileSize() {
-	util.PrintResult(strconv.FormatInt(GetDirSize(util.GetParam()), 10))
+	command.PrintResult(strconv.FormatInt(GetDirSize(command.GetCommandParam()), 10))
 }
 
 func FileTrashAdd() {
 	trashFileDto := TrashFileDto{}
-	json.Unmarshal([]byte(util.GetParam()), &trashFileDto)
+	json.Unmarshal([]byte(command.GetCommandParam()), &trashFileDto)
 
 	trashPath := filepath.Join(trashFileDto.RecyclePath, "recycle")
 	trashSize := trashFileDto.RecycleSize
@@ -184,7 +186,7 @@ func FileTrashAdd() {
 	}
 
 	if trashSize <= GetDirSize(trashPath)+tempSize {
-		util.PrintResult("LIMIT")
+		command.PrintResult("LIMIT")
 		return
 	}
 
@@ -210,14 +212,14 @@ func FileTrashAdd() {
 	indexJson, _ = json.MarshalIndent(trashFileSlice, "", "\t")
 	ioutil.WriteFile(filepath.Join(trashPath, "index.json"), indexJson, 0666)
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileTrashRecover() {
 	success := true
 
 	trashFileDto := TrashFileDto{}
-	json.Unmarshal([]byte(util.GetParam()), &trashFileDto)
+	json.Unmarshal([]byte(command.GetCommandParam()), &trashFileDto)
 
 	trashPath := filepath.Join(trashFileDto.RecyclePath, "recycle")
 	trashFileList := trashFileDto.TrashFileList
@@ -240,7 +242,7 @@ func FileTrashRecover() {
 	}
 
 	if !success {
-		util.PrintError("")
+		command.PrintError("")
 	}
 
 	FileTrashDelete()
@@ -248,7 +250,7 @@ func FileTrashRecover() {
 
 func FileTrashDelete() {
 	trashFileDto := TrashFileDto{}
-	json.Unmarshal([]byte(util.GetParam()), &trashFileDto)
+	json.Unmarshal([]byte(command.GetCommandParam()), &trashFileDto)
 
 	trashPath := filepath.Join(trashFileDto.RecyclePath, "recycle")
 	deleteTrashFileList := trashFileDto.TrashFileList
@@ -282,14 +284,14 @@ func FileTrashDelete() {
 			ioutil.WriteFile(filepath.Join(trashPath, "index.json"), indexJson, 0666)
 		}
 	}
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func FileTrashList() {
-	trashPath := util.GetParam()
+	trashPath := command.GetCommandParam()
 	if fsutil.PathExists(filepath.Join(trashPath, "index.json")) {
 		indexJson, _ := ioutil.ReadFile(filepath.Join(trashPath, "index.json"))
-		util.PrintResult(string(indexJson))
+		command.PrintResult(string(indexJson))
 	}
 }
 
@@ -309,15 +311,15 @@ type TrashFile struct {
 
 func FileUpload() {
 	var uploadFileDto UploadFileDto
-	json.Unmarshal([]byte(util.GetParam()), &uploadFileDto)
+	json.Unmarshal([]byte(command.GetCommandParam()), &uploadFileDto)
 
 	fileInfo, _ := os.Stat(uploadFileDto.FilePath)
 	if fileInfo.Size() > 2*1024*1024 {
-		util.PrintResult("LIMIT")
+		command.PrintResult("LIMIT")
 		return
 	}
 
-	url := util.PostJson(uploadFileDto.AgentUrl+"/cos/url/get", []byte("{\"serverId\":\""+util.GetHostId()+"\",\"tempFile\":\""+uploadFileDto.TempFile+"\"}"))
+	url := util.PostJson(uploadFileDto.AgentUrl+"/cos/url/get", []byte("{\"serverId\":\""+config.GetSid()+"\",\"tempFile\":\""+uploadFileDto.TempFile+"\"}"))
 
 	res, _ := http.Get(url)
 	newFile, _ := os.Create(filepath.Join(uploadFileDto.FilePath, uploadFileDto.FileName))
@@ -325,7 +327,7 @@ func FileUpload() {
 	defer res.Body.Close()
 	defer newFile.Close()
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 type UploadFileDto struct {
@@ -337,21 +339,21 @@ type UploadFileDto struct {
 
 func FileDownload() {
 	var uploadFileDto UploadFileDto
-	json.Unmarshal([]byte(util.GetParam()), &uploadFileDto)
+	json.Unmarshal([]byte(command.GetCommandParam()), &uploadFileDto)
 
 	filePath := uploadFileDto.FilePath
 	tempPath := strings.ReplaceAll(uuid.New().String(), "-", "")
 	fileInfo, _ := os.Stat(filePath)
 	if fileInfo.Size() > 2*1024*1024 {
-		util.PrintResult("LIMIT")
+		command.PrintResult("LIMIT")
 		return
 	}
-	url := util.PostJson(uploadFileDto.AgentUrl+"/cos/url/put", []byte("{\"serverId\":\""+util.GetHostId()+"\",\"tempFile\":\""+tempPath+"\"}"))
+	url := util.PostJson(uploadFileDto.AgentUrl+"/cos/url/put", []byte("{\"serverId\":\""+config.GetSid()+"\",\"tempFile\":\""+tempPath+"\"}"))
 	putResult := util.PutFile(url, filePath)
 	if putResult == "ERROR:-1" {
-		util.PrintResult(putResult)
+		command.PrintResult(putResult)
 	} else {
-		util.PrintResult(tempPath)
+		command.PrintResult(tempPath)
 	}
 }
 

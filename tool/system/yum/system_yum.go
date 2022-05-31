@@ -4,6 +4,7 @@ import (
 	"github.com/shirou/gopsutil/v3/host"
 	"io"
 	"io/ioutil"
+	"nodepanels-tool/command"
 	"nodepanels-tool/util"
 	"os"
 	"path/filepath"
@@ -42,11 +43,11 @@ func GetYum() {
 	}
 	content := strings.ReplaceAll(strings.ReplaceAll(string(file), "\n", "\\n"), "\"", "\\\"")
 	result := "{\"path\":\"" + path + "\",\"file\":\"" + content + "\",\"url\":\"" + url + "\"}"
-	util.PrintResult(result)
+	command.PrintResult(result)
 }
 
 func SetYum() {
-	param := util.GetParam()
+	param := command.GetCommandParam()
 
 	platform, _, platformVersion, _ := host.PlatformInformation()
 
@@ -54,9 +55,9 @@ func SetYum() {
 		platformVersion = strings.Split(platformVersion, ".")[0]
 		util.Download("https://nodepanels-file-1256221051.cos.accelerate.myqcloud.com/yum/"+param+"/centos/"+platformVersion+"/CentOS-Base.repo", "/etc/yum.repos.d/CentOS-Base.repo")
 		os.Chmod("/etc/yum.repos.d/CentOS-Base.repo", 0644)
-		util.PrintResult("CLEAN")
+		command.PrintResult("CLEAN")
 		util.ExecLinuxCmd("yum clean all")
-		util.PrintResult("MAKECACHE")
+		command.PrintResult("MAKECACHE")
 		util.ExecLinuxCmd("yum makecache")
 	} else if platform == "ubuntu" {
 		util.Download("https://nodepanels-file-1256221051.cos.accelerate.myqcloud.com/yum/"+param+"/ubuntu/"+platformVersion+"/sources.list", "/etc/apt/sources.list")
@@ -67,19 +68,19 @@ func SetYum() {
 		os.Chmod("/etc/apt/sources.list", 0644)
 	}
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func SetYumFile() {
-	param := util.GetParam()
+	param := command.GetCommandParam()
 
 	platform, _, _, _ := host.PlatformInformation()
 
 	if platform == "centos" {
 		os.WriteFile("/etc/yum.repos.d/CentOS-Base.repo", []byte(param), 0644)
-		util.PrintResult("CLEAN")
+		command.PrintResult("CLEAN")
 		util.ExecLinuxCmd("yum clean all")
-		util.PrintResult("MAKECACHE")
+		command.PrintResult("MAKECACHE")
 		util.ExecLinuxCmd("yum makecache")
 	} else if platform == "ubuntu" {
 		os.WriteFile("/etc/apt/sources.list", []byte(param), 0644)
@@ -87,7 +88,7 @@ func SetYumFile() {
 		os.WriteFile("/etc/apt/sources.list", []byte(param), 0644)
 	}
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func BackupYum() {
@@ -118,7 +119,7 @@ func BackupYum() {
 
 	io.Copy(destination, source)
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }
 
 func RestoreYum() {
@@ -143,7 +144,7 @@ func RestoreYum() {
 	}
 
 	if _, err := os.Stat(filepath.Join(util.Exepath(), "backup", "yum", filename)); os.IsNotExist(err) {
-		util.PrintError("")
+		command.PrintError("")
 	} else {
 		source, _ := os.Open(srcPath)
 		defer source.Close()
@@ -154,12 +155,12 @@ func RestoreYum() {
 		io.Copy(destination, source)
 
 		if platform == "centos" {
-			util.PrintResult("CLEAN")
+			command.PrintResult("CLEAN")
 			util.ExecLinuxCmd("yum clean all")
-			util.PrintResult("MAKECACHE")
+			command.PrintResult("MAKECACHE")
 			util.ExecLinuxCmd("yum makecache")
 		}
 
-		util.PrintSuccess()
+		command.PrintSuccess()
 	}
 }

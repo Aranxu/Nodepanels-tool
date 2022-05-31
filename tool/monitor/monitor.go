@@ -2,20 +2,19 @@ package monitor
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"nodepanels-tool/util"
+	"nodepanels-tool/command"
+	"nodepanels-tool/config"
 )
 
 func SetMonitorProcessRule() {
 
 	var processCmdList []string
-	json.Unmarshal([]byte(util.GetParam()), &processCmdList)
+	json.Unmarshal([]byte(command.GetCommandParam()), &processCmdList)
 
-	c := util.GetConfig()
+	c := config.GetConfig()
 	c.Monitor.Rule.Process = processCmdList
 
-	data, _ := json.MarshalIndent(c, "", "\t")
-	ioutil.WriteFile(util.Exepath()+"/config", data, 0666)
+	config.SetConfig(c)
 
-	util.PrintSuccess()
+	command.PrintSuccess()
 }

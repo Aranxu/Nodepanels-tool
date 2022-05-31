@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"nodepanels-tool/command"
 	"os"
 	"strings"
 	"unsafe"
@@ -14,17 +15,17 @@ func PostJson(url string, jsonParam []byte) string {
 
 	request, err := http.NewRequest("POST", url, bytes.NewReader(jsonParam))
 	if err != nil {
-		PrintError(err.Error())
+		command.PrintError(err.Error())
 	}
 	request.Header.Set("Content-Type", "application/json;charset=UTF-8")
 	client := http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		PrintError(err.Error())
+		command.PrintError(err.Error())
 	}
 	respBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		PrintError(err.Error())
+		command.PrintError(err.Error())
 	}
 	str := (*string)(unsafe.Pointer(&respBytes))
 	return *str

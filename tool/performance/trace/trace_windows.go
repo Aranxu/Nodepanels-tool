@@ -3,6 +3,7 @@ package trace
 import (
 	"bufio"
 	"io"
+	"nodepanels-tool/command"
 	"nodepanels-tool/util"
 	"os/exec"
 	"strings"
@@ -13,11 +14,11 @@ func Trace() {
 	//check traceroute
 	util.ExecWindowsCmd("tracert")
 	if util.ExecWindowsCmd("echo %errorlevel%") != "0" {
-		util.PrintError("ERROR")
+		command.PrintError("ERROR")
 		return
 	}
 
-	cmd := exec.Command("cmd", "/C", "tracert -d -h 30 -w 1 "+util.GetParam())
+	cmd := exec.Command("cmd", "/C", "tracert -d -h 30 -w 1 "+command.GetCommandParam())
 
 	stdout, _ := cmd.StdoutPipe()
 	stderr, _ := cmd.StderrPipe()
@@ -31,7 +32,7 @@ func Trace() {
 	if err := cmd.Wait(); err != nil {
 	}
 
-	util.PrintEnd()
+	command.PrintEnd()
 
 }
 
@@ -43,6 +44,6 @@ func asyncLog(std io.ReadCloser) error {
 		if err != nil || err == io.EOF {
 			return err
 		}
-		util.PrintResult(strings.TrimRight(strings.TrimRight(string(readString), "\n"), "\r"))
+		command.PrintResult(strings.TrimRight(strings.TrimRight(string(readString), "\n"), "\r"))
 	}
 }

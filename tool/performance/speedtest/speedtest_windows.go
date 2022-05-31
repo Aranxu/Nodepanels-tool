@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gookit/goutil/fsutil"
 	"io"
+	"nodepanels-tool/command"
 	"nodepanels-tool/util"
 	"os"
 	"os/exec"
@@ -23,7 +24,7 @@ func SpeedTest() {
 	}
 	var cmd *exec.Cmd
 
-	nodeIds := strings.Split(util.GetParam(), " ")
+	nodeIds := strings.Split(command.GetCommand().Tool.Param, " ")
 
 	for _, value := range nodeIds {
 
@@ -41,7 +42,7 @@ func SpeedTest() {
 		if err := cmd.Wait(); err != nil {
 		}
 	}
-	util.PrintSuccess()
+	command.PrintSuccess()
 
 	os.Remove(filepath.Join(util.Exepath(), speedtestFileName))
 }
@@ -65,7 +66,7 @@ func asyncLog(nodeId string, std io.ReadCloser) error {
 			latency := strings.Split(strings.Split(strings.ReplaceAll(strings.TrimSpace(string(readString)), " ", ""), ":")[1], "ms")[0]
 			resultMap.Latency = latency
 			SpeedtestSendBack(resultMap)
-			if "performance-net-speedtest-ping" == util.GetToolType() {
+			if "performance-net-speedtest-ping" == command.GetCommand().Tool.Type {
 				SpeedtestKill()
 			}
 		} else if strings.Contains(string(readString), "Download") {
@@ -83,5 +84,5 @@ func asyncLog(nodeId string, std io.ReadCloser) error {
 
 func SpeedtestSendBack(resultMap ResultMap) {
 	resultMsg, _ := json.Marshal(resultMap)
-	util.PrintResult(string(resultMsg))
+	command.PrintResult(string(resultMsg))
 }
