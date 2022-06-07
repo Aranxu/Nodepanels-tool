@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"github.com/gookit/goutil/fsutil"
 	"github.com/gookit/goutil/jsonutil"
 	"io/ioutil"
 	"nodepanels-tool/config"
@@ -38,6 +39,10 @@ func GetCommandType() string {
 
 func GetCommandParam() string {
 	return GetCommand().Tool.Param
+}
+
+func DelCommandTempFile() {
+	fsutil.QuietRemove(filepath.Join(config.BinPath, "temp", os.Args[1]+".temp"))
 }
 
 func PrintResult(msg string) {
