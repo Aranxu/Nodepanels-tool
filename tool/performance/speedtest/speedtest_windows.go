@@ -17,7 +17,7 @@ import (
 func SpeedTest() {
 
 	speedtestFileName := "np-speedtest-cli.exe"
-	speedtestDownloadUrl := "https://nodepanels-file-1256221051.cos.accelerate.myqcloud.com/speedtest/speedtest-windows-" + runtime.GOARCH + ".exe"
+	speedtestDownloadUrl := "https://file.nodepanels.com/speedtest/speedtest-windows-" + runtime.GOARCH + ".exe"
 
 	if !fsutil.PathExists(filepath.Join(util.Exepath(), speedtestFileName)) {
 		util.Download(speedtestDownloadUrl, filepath.Join(util.Exepath(), speedtestFileName))
