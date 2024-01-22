@@ -53,18 +53,18 @@ func SetYum() {
 
 	if platform == "centos" {
 		platformVersion = strings.Split(platformVersion, ".")[0]
-		util.Download("https://nodepanels-file-1256221051.cos.accelerate.myqcloud.com/yum/"+param+"/centos/"+platformVersion+"/CentOS-Base.repo", "/etc/yum.repos.d/CentOS-Base.repo")
+		util.Download("https://file.nodepanels.com/yum/"+param+"/centos/"+platformVersion+"/CentOS-Base.repo", "/etc/yum.repos.d/CentOS-Base.repo")
 		os.Chmod("/etc/yum.repos.d/CentOS-Base.repo", 0644)
 		command.PrintResult("CLEAN")
 		util.ExecLinuxCmd("yum clean all")
 		command.PrintResult("MAKECACHE")
 		util.ExecLinuxCmd("yum makecache")
 	} else if platform == "ubuntu" {
-		util.Download("https://nodepanels-file-1256221051.cos.accelerate.myqcloud.com/yum/"+param+"/ubuntu/"+platformVersion+"/sources.list", "/etc/apt/sources.list")
+		util.Download("https://file.nodepanels.com/yum/"+param+"/ubuntu/"+platformVersion+"/sources.list", "/etc/apt/sources.list")
 		os.Chmod("/etc/apt/sources.list", 0644)
 	} else if platform == "debian" {
 		platformVersion = strings.Split(platformVersion, ".")[0]
-		util.Download("https://nodepanels-file-1256221051.cos.accelerate.myqcloud.com/yum/"+param+"/debian/"+platformVersion+"/sources.list", "/etc/apt/sources.list")
+		util.Download("https://file.nodepanels.com/yum/"+param+"/debian/"+platformVersion+"/sources.list", "/etc/apt/sources.list")
 		os.Chmod("/etc/apt/sources.list", 0644)
 	}
 
