@@ -30,7 +30,7 @@ func main() {
 		}
 	}()
 
-	version := "v2.0.1"
+	version := "v2.0.2"
 
 	if len(os.Args) > 1 {
 

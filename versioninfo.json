@@ -3,12 +3,12 @@
     "FileVersion": {
       "Major": 2,
       "Minor": 0,
-      "Patch": 1
+      "Patch": 2
     },
     "ProductVersion": {
       "Major": 2,
       "Minor": 0,
-      "Patch": 1,
+      "Patch": 2,
       "Build": 0
     },
     "FileFlagsMask": "3f",
@@ -21,14 +21,14 @@
     "Comments": "Nodepanels tool",
     "CompanyName": "Nodepanels",
     "FileDescription": "Nodepanels tool",
-    "FileVersion": "v2.0.1",
+    "FileVersion": "v2.0.2",
     "InternalName": "nodepanels-tool.exe",
-    "LegalCopyright": "Copyright (c) 2022 Nodepanels",
+    "LegalCopyright": "Copyright (c) 2024 Nodepanels",
     "LegalTrademarks": "",
     "OriginalFilename": "nodepanels-tool.exe",
     "PrivateBuild": "",
     "ProductName": "Nodepanels-tool",
-    "ProductVersion": "v2.0.1",
+    "ProductVersion": "v2.0.2",
     "SpecialBuild": ""
   },
   "VarFileInfo": {
